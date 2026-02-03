@@ -1,0 +1,55 @@
+.image-wrapper {
+    position: relative;
+    width: 50%;
+}
+
+.image-wrapper img {
+    width: 100%;
+    display: block;
+    transition: filter 0.3s ease;
+}
+
+.overlay-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    text-align: center;
+}
+
+.image-wrapper:hover img {
+    filter: brightness(50%);
+}
+
+.image-wrapper:hover .overlay-text {
+    opacity: 1;
+}
+
+
+#file {
+    display: none !important;
+}
+
+small {
+    color: red;
+}
+
+.border-red {
+    border-color: red;
+}
+
+.success {
+    color: limegreen;
+    text-decoration: underline;
+}
+
+.required::before {
+    content: '* ';
+    color: red;
+}
