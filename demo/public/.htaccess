@@ -1,0 +1,12 @@
+RewriteEngine On
+
+# Stop rewriting assets
+RewriteRule ^assets/ - [L]
+
+# Serve real files & folders
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Everything else → index.php
+RewriteRule ^ index.php [L]
