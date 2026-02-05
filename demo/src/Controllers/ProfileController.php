@@ -14,7 +14,7 @@
         {
             redirectIfNotLoggedIn('');
 
-            $userData = Profile::all(Session::get("user_id"));
+            $userData = Profile::find("id", Session::get("user_id"));
 
             $this->render("profile", ["userData" => $userData]);
         }
@@ -23,7 +23,7 @@
         {
             $errors = [];
 
-            $userData = Profile::all(Session::get('user_id'));
+            $userData = Profile::find("id", Session::get('user_id'));
 
             // file
             if (isset($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK) {
@@ -42,7 +42,7 @@
             // username
             if (!empty(Request::input('username'))) {
                 $username = Request::input('username');
-                $res = Profile::check('username', $username);
+                $res = Profile::find('username', $username);
 
                 if (!Validator::string($username, 3, 20)) {
                     $errors['username'] = 'Username must be between 3 and 20 characters';
@@ -56,7 +56,7 @@
             // email
             if (!empty(Request::input('email'))) {
                 $email = Request::input('email');
-                $res = Profile::check('email', $email);
+                $res = Profile::find('email', $email);
 
                 if (!Validator::email($email)) {
                     $errors['email'] = 'Your email is not well formed';
@@ -83,7 +83,7 @@
 
             // changes
             if (isset($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK) {
-                $target_dir = __DIR__ . '/../Views/assets/uploads/';
+                $target_dir = __DIR__ . '/../../public/assets/uploads/';
                 $target_file = $target_dir . $file['name'];
 
                 if (move_uploaded_file($file['tmp_name'], $target_file)) {
