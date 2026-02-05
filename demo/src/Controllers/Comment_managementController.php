@@ -23,17 +23,17 @@
             Session::flash('old', Request::all());
 
             if (!empty($date) && !empty($search_inp)) {
-                $comments = Comment_management::searchByUsernameAndDate($search_inp, $date);
+                $comments = Comment_management::search($search_inp, $date);
 
                 $this->render("comment_management", ["comments" => $comments]);
 
             } else if(empty($date) && !empty($search_inp)) {
-                $comments = Comment_management::searchByUsername($search_inp);
+                $comments = Comment_management::search($search_inp, null);
 
                 $this->render("comment_management", ["comments" => $comments]);
 
             } else {
-                $comments = Comment_management::searchByDate($date);
+                $comments = Comment_management::search(null, $date);
 
                 $this->render("comment_management", ["comments" => $comments]);
             }
