@@ -6,30 +6,45 @@
 
     class Comment_management extends Database
     {
+        private static function query_start()
+        {
+            return "SELECT comments.*, users.username FROM comments JOIN users ON users.id = comments.user_id";
+        }
+
         public static function all()
         {
-            return parent::query("SELECT comments.*,users.username FROM comments JOIN users ON users.id = comments.user_id ORDER BY comments.id ASC")->fetchAll(\PDO::FETCH_ASSOC);
+            return parent::query(self::query_start() . " ORDER BY comments.id ASC")->fetchAll(\PDO::FETCH_ASSOC);
         }
 
-        public static function searchByUsername($username)
+        public static function search($username, $date)
         {
-            $query = "SELECT comments.*, users.username FROM comments JOIN users ON users.id = comments.user_id WHERE users.username = :username ORDER BY comments.id ASC";
+            $query = self::query_start();
 
-            return parent::query($query, [":username" => $username])->fetchAll(\PDO::FETCH_ASSOC);
-        }
+            $conditions = [];
+            $params = [];
 
-        public static function searchByDate($date)
-        {
-            $query = "SELECT comments.*, users.username FROM comments JOIN users ON users.id = comments.user_id WHERE comments.created_at = :created_at ORDER BY comments.id ASC";
+            if (!empty($username)) {
+                $conditions[] = "users.username = :username";
+                $params[':username'] = $username; 
+            }
 
-            return parent::query($query, [":created_at" => $date])->fetchAll(\PDO::FETCH_ASSOC);
-        }
+            if (!empty($date)) {
+                $conditions[] = "comments.created_at = :created_at";
+                $params[':created_at'] = $date;
+            }
 
-        public static function searchByUsernameAndDate($username, $date)
-        {
-            $query = "SELECT comments.*, users.username FROM comments JOIN users ON users.id = comments.user_id WHERE users.username = :username AND comments.created_at = :created_at ORDER BY comments.id ASC";
-            
-            return parent::query($query, [':username' => $username,':created_at' => $date])->fetchAll(\PDO::FETCH_ASSOC);
+            if (!empty($username) && !empty($date)) {
+                $query .= " WHERE " . $conditions[0] . " AND " . $conditions[1] . " ORDER BY comments.id ASC";
+                return parent::query($query, $params)->fetchAll(\PDO::FETCH_ASSOC);
+
+            } else if(!empty($username) && empty($date)) {
+                $query .= " WHERE " . $conditions[0] . " ORDER BY comments.id ASC";
+                return parent::query($query, $params)->fetchAll(\PDO::FETCH_ASSOC);
+
+            } else if(empty($username) && !empty($date)) {
+                $query .= " WHERE " . $conditions[1] . " ORDER BY comments.id ASC";
+                return parent::query($query, $params)->fetchAll(\PDO::FETCH_ASSOC);
+            }
         }
 
         public static function deleteComments($id)
