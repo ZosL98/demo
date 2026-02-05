@@ -25,7 +25,7 @@
 
             if (!empty($username)) {
                 $conditions[] = "users.username = :username";
-                $params[':username'] = $username; 
+                $params[':username'] = $username;
             }
 
             if (!empty($date)) {
@@ -42,7 +42,7 @@
                 return parent::query($query, $params)->fetchAll(\PDO::FETCH_ASSOC);
 
             } else if(empty($username) && !empty($date)) {
-                $query .= " WHERE " . $conditions[1] . " ORDER BY comments.id ASC";
+                $query .= " WHERE " . $conditions[0] . " ORDER BY comments.id ASC";
                 return parent::query($query, $params)->fetchAll(\PDO::FETCH_ASSOC);
             }
         }
