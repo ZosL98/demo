@@ -32,10 +32,12 @@
 
                 $this->render("comment_management", ["comments" => $comments]);
 
-            } else {
+            } else if (!empty($date) && empty($search_inp)) {
                 $comments = Comment_management::search(null, $date);
 
                 $this->render("comment_management", ["comments" => $comments]);
+            } else {
+                $this->index();
             }
         }
 
