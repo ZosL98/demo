@@ -33,16 +33,15 @@
 
             if (!empty($username) && !empty($date)) {
                 $query .= " WHERE " . $conditions[0] . " AND " . $conditions[1] . self::query_end;
-                return parent::query($query, $params)->fetchAll(\PDO::FETCH_ASSOC);
 
             } else if(!empty($username) && empty($date)) {
                 $query .= " WHERE " . $conditions[0] . self::query_end;
-                return parent::query($query, $params)->fetchAll(\PDO::FETCH_ASSOC);
 
             } else if(empty($username) && !empty($date)) {
                 $query .= " WHERE " . $conditions[0] . self::query_end;
-                return parent::query($query, $params)->fetchAll(\PDO::FETCH_ASSOC);
             }
+
+            return parent::query($query, $params)->fetchAll(\PDO::FETCH_ASSOC);
         }
 
         public static function deleteComments($id)
