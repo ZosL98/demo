@@ -6,12 +6,7 @@
 
     class Profile extends Database
     {
-        public static function all($id)
-        {
-           return Database::query("SELECT * FROM users WHERE id = :id", [":id" => $id])->fetch(\PDO::FETCH_ASSOC);
-        }
-
-        public static function check($header, $val)
+        public static function find($header, $val)
         {
             return Database::query("SELECT * FROM users WHERE $header = :$header", ["$header" => $val])->fetch(\PDO::FETCH_ASSOC);
         }
