@@ -1,6 +1,6 @@
 <?php include('includes/header.php'); ?>
 
-<link rel="stylesheet" href="/../demo/src/Views/assets/css/user.css">
+<link rel="stylesheet" href="/../demo/public/assets/css/user.css">
 
 <div class="container mt-5">
     <div class="col-md-8 mx-auto">
@@ -22,5 +22,6 @@
 
     </div>
 </div>
+
 
 <?php include('includes/footer.php'); ?>
