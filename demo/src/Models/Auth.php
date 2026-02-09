@@ -14,6 +14,10 @@
 
         public static function store($username, $email, $password)
         {
-            Functions::insert("users", [$username, $email, $password], [":username", ":email", ":password"]);
+            Functions::insert("users", [
+                ":username" => $username,
+                ":email" => $email,
+                ":password" => $password,
+            ]);
         }
     }
