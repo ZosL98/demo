@@ -3,6 +3,7 @@
     namespace App\Models;
 
     use App\Core\Database;
+    use App\Core\Functions;
 
     class Auth extends Database
     {
@@ -13,10 +14,6 @@
 
         public static function store($username, $email, $password)
         {
-            parent::query("INSERT INTO users(username, email, password) VALUES(:username, :email, :password)", [
-                ":username" => $username,
-                ":email" => $email,
-                ":password" => $password,
-            ]);
+            Functions::insert("users", [$username, $email, $password], [":username", ":email", ":password"]);
         }
     }
