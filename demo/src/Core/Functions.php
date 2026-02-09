@@ -6,22 +6,23 @@
 
     class Functions extends Database
     {
-        public static function insert($table, $params = [], $values = [])
+        public static function insert($table, $data = [])
         {
-            $paramsRes = [];
             $headers = [];
 
-            for ($i = 0; $i < count($params); $i++) {
-                $paramsRes[$values[$i]] = $params[$i];
+            $keys = implode(",", array_keys($data));
+
+            foreach(explode(",", $keys) as $key) {
+                $key = substr($key, 1);
+
+                $headers[] = $key;
             }
 
-            $headers = array_map(fn($v) => substr($v, 1), $values);
-
             $headers = implode(",", $headers);
-            $values = implode(",", $values);
+            $values = implode(",", array_keys($data));
 
-            $query = "INSERT INTO $table($headers) VALUES($values)";
+            $query = "INSERT INTO $table ($headers) VALUES($values)";
 
-            Database::query($query, $paramsRes);
+            Database::query($query, $data);
         }
     }
