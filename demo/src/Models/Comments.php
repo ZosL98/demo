@@ -3,6 +3,7 @@
     namespace App\Models;
 
     use App\Core\Database;
+    use App\Core\Functions;
 
     class Comments extends Database
     {
@@ -14,11 +15,7 @@
 
         public static function store($user_id, $comment, $parent_id)
         {
-            parent::query("INSERT INTO comments(user_id, comment, parent_id) VALUES(:user_id, :comment, :parent_id)", [
-                ":user_id" => $user_id,
-                ":comment" => $comment,
-                ":parent_id" => $parent_id,
-            ]);
+            Functions::insert("comments", [$user_id, $comment, $parent_id], [":user_id", ":comment", ":parent_id"]);
         }
 
         public static function delete($id, $user_id)
