@@ -2,6 +2,8 @@
 
 namespace App\Core;
 
+use Exception;
+
 class Database {
     private static $username = "root";
     private static $password = "";
@@ -24,6 +26,19 @@ class Database {
         return $statement;
     }
 
+    public static function find($table, $column, $value)
+    {
+        $allowedTables = ["users", "comments"];
+        $allowedColumns = ["username", "email", "id"];
+
+        if (!in_array($table, $allowedTables) || !in_array($column, $allowedColumns)) {
+            throw new Exception("Not allowed");
+            exit;
+        }
+
+        return Database::query("SELECT * FROM $table WHERE $column = :$column", [":$column" => $value])->fetch(\PDO::FETCH_ASSOC);
+    }
+
     public static function insert($table, $data = [])
     {
         $headers = [];
@@ -44,4 +59,3 @@ class Database {
         Database::query($query, $data);
     }
 }
-
