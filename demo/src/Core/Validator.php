@@ -2,7 +2,7 @@
 
     namespace App\Core;
 
-    use App\Models\Validation;
+    use App\Core\Database;
     
     class Validator
     {
@@ -55,7 +55,7 @@
                         $parsed = explode(':', $v)[1];
                         [$table, $column] = explode(',', $parsed);
 
-                        $res = Validation::find($table, $column, $input);
+                        $res = Database::find($table, $column, $input);
 
                         $res ? $errors[$key] = "This $column is already taken" : null;
                     }
@@ -76,7 +76,7 @@
                     }
 
                     if ($v === "password" && !empty($input)) {
-                        $res = Validation::find("users", "id", Session::get('user_id'));
+                        $res = Database::find("users", "id", Session::get('user_id'));
 
                         if (!$res || !password_verify($input, $res['password'])) {
                             $errors[$key] = "Wrong password.";
