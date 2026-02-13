@@ -6,11 +6,6 @@
 
     class Auth extends Database
     {
-        public static function find($header, $value)
-        {
-            return parent::query("SELECT * FROM users WHERE $header = :$header", [":$header" => $value])->fetch(\PDO::FETCH_ASSOC);
-        }
-
         public static function store($username, $email, $password)
         {
             Database::insert("users", [
