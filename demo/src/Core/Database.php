@@ -7,7 +7,7 @@ class Database {
     private static $password = "";
     private static $conn;
 
-    public static function connect() {
+    private static function connect() {
         try {
             self::$conn = new \PDO("mysql:host=localhost;dbname=demo;charset=utf8mb4", self::$username, self::$password);
             self::$conn->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
@@ -44,3 +44,4 @@ class Database {
         Database::query($query, $data);
     }
 }
+
