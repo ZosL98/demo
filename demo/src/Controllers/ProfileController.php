@@ -3,6 +3,7 @@
     namespace App\Controllers;
 
     use App\Controller;
+    use App\Core\Database;
     use App\Core\Session;
     use App\Core\Request;
     use App\Core\Validator;
@@ -14,7 +15,7 @@
         {
             redirectIfNotLoggedIn('');
 
-            $userData = Profile::find("id", Session::get("user_id"));
+            $userData = Database::find("users", "id", Session::get("user_id"));
 
             $this->render("profile", ["userData" => $userData]);
         }
