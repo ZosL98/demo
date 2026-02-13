@@ -4,6 +4,7 @@
 
     use App\Controller;
     use App\Core\Request;
+    use App\Core\Database;
     use App\Core\Session;
     use App\Core\Validator;
     use App\Models\Auth;
@@ -56,7 +57,7 @@
                 redirect('login');
             }
 
-            $res = Auth::find('username', Request::input('username'));
+            $res = Database::find("users", 'username', Request::input('username'));
             $password = trim(Request::input('password'));
 
             if (!$res || !password_verify($password, $res['password'])) {
