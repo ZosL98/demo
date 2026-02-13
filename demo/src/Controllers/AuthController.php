@@ -22,51 +22,12 @@
 
         public function store()
         {
-            $errors = [];
-
-            $username = trim(Request::input('username'));
-            $email = trim(Request::input('email'));
-            $password = trim(Request::input('password'));
-            $password_confirm = trim(Request::input('password_confirm'));
-
-            $resUsername = Auth::check('username', $username);
-            $resEmail = Auth::check('email', $email);
-
-            if (empty($username)) {
-                $errors['username'] = 'Username field must not be empty';
-
-            } else if(!Validator::string($username, 3, 20)) {
-                $errors['username'] = 'Username must be between 3 and 20 characters';
-
-            } else if($resUsername) {
-                $errors['username'] = 'This username is already used';
-            }
-
-            if (empty($email)) {
-                $errors['email'] = 'Email field must not be empty';
-
-            } else if(!Validator::email($email)) {
-                $errors['email'] = 'Your email is not well formed';
-                
-            } else if($resEmail) {
-                $errors['email'] = 'This email is already used';
-            }
-
-            if (empty($password)) {
-                $errors['password'] = 'Password field must not be empty';
-
-            } else if (!Validator::string($password, 3, INF)) {
-                $errors['password'] = 'Password must be at least 3 characters long';
-            }
-
-            if (empty($password_confirm)) {
-                $errors['password_confirm'] = 'Cofirm password field must not be empty';
-            }
-
-            if ($password_confirm !== $password) {
-                $errors['password'] = "Passwords do not match";
-                $errors['password_confirm'] = "Passwords do not match";
-            }
+            $errors = Validator::validate([
+                'username' => ['min:3', 'max:20', 'required', 'unique:users,username'],
+                'email' => ['email', 'required', 'unique:users,email'],
+                'password' => ['min:3', 'max:20', 'required', 'matches:password_confirm'],
+                'password_confirm' => ['min:3', 'max:20', 'required', 'matches:password'],
+            ]);
 
             if (!empty($errors)) {
                 Session::flash('errors', $errors);
@@ -76,7 +37,7 @@
 
             $hashed = password_hash(Request::input('password'), PASSWORD_DEFAULT);
 
-            Auth::store($username, $email, $hashed);
+            Auth::store(Request::input('username'), Request::input('email'), $hashed);
             Session::flash('success', 'You have successfully registered');
             redirect('register');
         }
@@ -84,31 +45,22 @@
 
         public function login()
         {
-            $errors = [];
-            
-            $res = Auth::check('username', Request::input('username'));
-
-            $username = trim(Request::input('username'));
-            $password = trim(Request::input('password'));
-
-            if (!$res || !password_verify($password, $res['password'])) {
-                $errors['username'] = 'Wrong username or password';
-                $errors['password'] = 'Wrong username or password';
-            }
-
-            if (empty($username)) {
-                $errors['username'] = 'Username field must not be empty';
-            } else if(!Validator::string($username, 3, 20)) {
-                $errors['username'] = 'Username must be between 3 and 20 characters';
-            }
-
-            if (empty($password)) {
-                $errors['password'] = 'Password field must not be empty';
-            }
+            $errors = Validator::validate([
+                'username' => ['min:3', 'max:20', 'required'],
+                'password' => ['required'],
+            ]);
 
             if (!empty($errors)) {
                 Session::flash('old', Request::all());
                 Session::flash('errors', $errors);
+                redirect('login');
+            }
+
+            $res = Auth::find('username', Request::input('username'));
+            $password = trim(Request::input('password'));
+
+            if (!$res || !password_verify($password, $res['password'])) {
+                Session::flash('errors', ['password' => 'Wrong username or password.']);
                 redirect('login');
             }
 
