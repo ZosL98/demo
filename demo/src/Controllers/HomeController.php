@@ -21,7 +21,7 @@ class HomeController extends Controller
         $this->render('index');
     }
 
-    public static function store()
+    public function store()
     {
         $errors = Validator::validate([
             'email' => ['email', 'required'],
@@ -65,3 +65,4 @@ class HomeController extends Controller
 
 
 }
+
